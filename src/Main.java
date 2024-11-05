@@ -1,6 +1,12 @@
+import javax.swing.*;
+
 public class Main {
     public static void main(String[] args) {
-        Interaction obj = new Interaction();
-        obj.iniciar();
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new PopUp().setVisible(true);
+            }
+        });
     }
 }

@@ -4,11 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PopUp extends JFrame {
-    private Interaction inte;
 
-    public void setInteraction(Interaction inte) {
-        this.inte = inte;
-    }
+    private Interaction interaction;
 
     public PopUp() {
         // Configuración de la ventana principal
@@ -80,7 +77,7 @@ public class PopUp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Solicitar al usuario el nombre del archivo
-                inte.archivo();
+                accion();
                 // Cerrar la ventana de recordatorio
                 SwingUtilities.getWindowAncestor(reminderPanel).dispose();
             }
@@ -97,7 +94,7 @@ public class PopUp extends JFrame {
 
     // Método para solicitar el nombre del archivo y validar su existencia
     public String requestFileName() {
-        String fileName = "";
+        String fileName;
         while (true) {
             // Solicitar el nombre del archivo al usuario con opciones "Aceptar" y "Cancelar"
             fileName = (String) JOptionPane.showInputDialog(
@@ -121,11 +118,15 @@ public class PopUp extends JFrame {
                 JOptionPane.showMessageDialog(this, "Debe ingresar un nombre de archivo.", "Error", JOptionPane.ERROR_MESSAGE);
                 continue;
             }
+
+            if (fileName != null){
+                break;
+            }
         }
         return fileName;
     }
 
-    public void errorMessage(){
+    public void errorMessageArchive(){
         JOptionPane.showMessageDialog(this, "El archivo no existe. Intente nuevamente.", "Error", JOptionPane.ERROR_MESSAGE);
     }
 
@@ -150,5 +151,10 @@ public class PopUp extends JFrame {
             JOptionPane.showMessageDialog(this, "Has seleccionado Java.");
             // Lógica para procesar el archivo y generar código en Java
         }
+    }
+
+    private void accion(){
+        this.interaction = new Interaction();
+        interaction.verificador();
     }
 }
