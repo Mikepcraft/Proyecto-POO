@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 public class PopUp extends JFrame {
 
@@ -66,7 +67,7 @@ public class PopUp extends JFrame {
                         "- Estar escrito estrictamente en PlantUML<br>" +
                         "- Estar en la carpeta donde se encuentra el código<br>" +
                         "- Tener los modificadores de acceso establecidos con (#,+. -)<br>" +
-                        "- Tener un espacio entre los modificadores de acceso, y los atributos y metodos</html>",
+                        "- No poner las relaciones de clases (solo se permiten implements y extends)</html>",
                 JLabel.CENTER
         );
         reminderPanel.add(reminderLabel, BorderLayout.CENTER);
@@ -77,7 +78,7 @@ public class PopUp extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Solicitar al usuario el nombre del archivo
-                accion();
+                    accion();
                 // Cerrar la ventana de recordatorio
                 SwingUtilities.getWindowAncestor(reminderPanel).dispose();
             }
@@ -99,7 +100,7 @@ public class PopUp extends JFrame {
             // Solicitar el nombre del archivo al usuario con opciones "Aceptar" y "Cancelar"
             fileName = (String) JOptionPane.showInputDialog(
                     this,
-                    "Ingrese el nombre del archivo (incluya la extensión .txt):",
+                    "Ingrese el nombre del archivo:",
                     "Seleccionar Archivo",
                     JOptionPane.PLAIN_MESSAGE,
                     null,
@@ -120,10 +121,44 @@ public class PopUp extends JFrame {
             }
 
             if (fileName != null){
+                fileName = (fileName+".txt");
                 break;
             }
         }
         return fileName;
+    }
+
+    public String requestNewFileName() {
+        String newFileName;
+        while (true) {
+            // Solicitar el nombre del archivo al usuario con opciones "Aceptar" y "Cancelar"
+            newFileName = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Ingrese el nombre del archivo que se creará",
+                    "Seleccionar Archivo",
+                    JOptionPane.PLAIN_MESSAGE,
+                    null,
+                    null,
+                    null
+            );
+
+            // Validar si el usuario presionó "Cancelar" o dejó el campo vacío
+            if (newFileName == null) {
+                // Si el usuario presionó "Cancelar", se cierra el cuadro de diálogo y se sale del método
+                break;
+            }
+
+            // Validar si el usuario ingresó un nombre vacío
+            if (newFileName.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe ingresar un nombre de archivo.", "Error", JOptionPane.ERROR_MESSAGE);
+                continue;
+            }
+
+            if (newFileName != null){
+                break;
+            }
+        }
+        return newFileName;
     }
 
     public void errorMessageArchive(){
@@ -131,7 +166,7 @@ public class PopUp extends JFrame {
     }
 
     // Método para mostrar la selección de idioma
-    public void requestLanguageSelection() {
+    public int requestLanguageSelection() {
         // Crear opciones de idioma
         Object[] options = {"Python", "Java"};
         int choice = JOptionPane.showOptionDialog(this,
@@ -142,18 +177,10 @@ public class PopUp extends JFrame {
                 null,
                 options,
                 options[0]);
-
-        // Mensaje de confirmación de idioma seleccionado
-        if (choice == 0) {
-            JOptionPane.showMessageDialog(this, "Has seleccionado Python.");
-            // Lógica para procesar el archivo y generar código en Python
-        } else if (choice == 1) {
-            JOptionPane.showMessageDialog(this, "Has seleccionado Java.");
-            // Lógica para procesar el archivo y generar código en Java
-        }
+        return choice;
     }
 
-    private void accion(){
+    private void accion() {
         this.interaction = new Interaction();
         interaction.verificador();
     }

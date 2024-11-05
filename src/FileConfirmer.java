@@ -4,7 +4,6 @@ import java.io.File;
 public class FileConfirmer {
     private Interaction inte;
 
-
     public void setInteraction(Interaction inte) {
         this.inte = inte;
     }
